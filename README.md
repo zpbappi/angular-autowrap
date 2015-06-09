@@ -1,4 +1,4 @@
-# angular-autowrap
+# Angular AutoWrap
 ## Building
 Make sure that you have [gulp](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md) installed globally. Then, on the project root folder, run the following commands in sequence:
 ```sh
