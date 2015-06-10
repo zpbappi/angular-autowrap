@@ -8,15 +8,15 @@ var fileName = "angular-autowrap.js",
     minFileName = "angular-autowrap.min.js";
     
 var getSourceFiles = function(){
-    return gulp.src("./src/**/*.js");
+    return gulp.src(["./src/app.js", "./src/**/*.js"]);
 };
 
 gulp.task("clean-debug", function(cb){
-   return del("./dist/debug/*", cb); 
+   return del(["./dist/" + fileName, "./dist/" + fileName + ".map"], cb); 
 });
 
 gulp.task("clean-release", function(cb){
-   return del("./dist/release/*", cb);
+   return del("./dist/" + minFileName, cb);
 });
 
 gulp.task("clean", ["clean-debug", "clean-release"]);
@@ -25,15 +25,15 @@ gulp.task("debug", ["clean-debug"], function(){
     return getSourceFiles()
     .pipe(sourcemaps.init())
     .pipe(concat(fileName))
-    .pipe(sourcemaps.write("./", {includeContent: false, sourceRoot: "../../src/"}))
-    .pipe(gulp.dest("./dist/debug/"));  
+    .pipe(sourcemaps.write("./", {includeContent: false, sourceRoot: "../src/"}))
+    .pipe(gulp.dest("./dist/"));  
 });
 
 gulp.task("release", ["clean-release"], function(){
     return getSourceFiles()
     .pipe(concat(minFileName))
     .pipe(uglify())
-    .pipe(gulp.dest("./dist/release/"));
+    .pipe(gulp.dest("./dist/"));
 });
 
 gulp.task("all", ["debug", "release"]);
