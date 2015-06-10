@@ -1,0 +1,63 @@
+<html>
+	<head>
+		<style type="text/css">
+		.auto-wrapper .auto-wrapper-message {
+			display: none;
+		}
+		.auto-wrapper.dirty.invalid .auto-wrapper-message{
+			display: block;
+		}
+		.auto-wrapper.dirty.valid input, .auto-wrapper.dirty.valid select, .auto-wrapper.dirty.valid textarea{
+			border-color: green;
+		}
+		.auto-wrapper.dirty.invalid input, .auto-wrapper.dirty.invalid select, .auto-wrapper.dirty.invalid textarea{
+			border-color:red;
+		}
+		</style>
+		
+		
+		<script src="../node_modules/angular/angular.js">
+		</script>
+		
+		<script src="../dist/angular-autowrap.js">
+		</script>
+		<script type="text/javascript">
+			angular
+			.module("autowrapExample", ["angular-autowrap"])
+			.controller("veryBasicController", ["$scope", function($scope){
+				$scope.myName = "Test Name";
+			}]);
+		</script>
+	</head>
+	
+	<body ng-app="autowrapExample">
+		<div id="formId" data-ng-form name="myForm">
+			<div ng-controller="veryBasicController">
+				<div class="container">
+					<label for="myName">My Name with default template</label>
+					<input type="text" id="myName" name="myName" 
+					data-ng-model="myName" 
+					autowrap
+					required />							
+				</div>
+			</div>
+			<br/>
+			<select name="mySelect"
+			ng-model="model.number"
+			required
+			autowrap>
+				<option value="">Please select...</option>
+				<option value="1">One</option>
+				<option value="2">Two</option>
+			</select>
+		</div>
+		
+		<script type="text/ng-template" id="autowrap-templates/select.html">
+			<div class="input-wrapper">
+				<div class="current-time" ng-style="{'color': (isValid() ? 'green' : (isInvalid() ? 'red' : 'black' ))}">Select with custom template</div>
+				<placeholder />
+				<div ng-if="isDirty() && isInvalid()" class="errorMessage">{{validationMessage()}}</div>
+			</div>
+		</script>
+	</body>
+</html>
