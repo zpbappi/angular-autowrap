@@ -6,8 +6,10 @@ npm install
 gulp
 ```
 
-Now you will have minified version in `dist/release` folder 
-and debug version with source maps in `dist/debug` folder.
+Now you will have minified version 
+and un-minified version with source map in `dist` folder.
 
 ## Usage
 Yet TODO...
+
+For now, check the `example` folder.
