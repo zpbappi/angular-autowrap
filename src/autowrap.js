@@ -5,9 +5,13 @@
 	.module("angular-autowrap")
 	.directive("autowrap", [
 		"$compile",
+		"$filter",
 		"autowrapTemplateProvider",
 		"autowrapConfig",
-		function($compile, autowrapTemplateProvider, providedConfig){
+		function($compile, $filter, autowrapTemplateProvider, providedConfig){
+			
+			var filter = $filter("filter");
+			
 			return {
 				restrict: "A",
 				require: "^form",
@@ -24,6 +28,7 @@
 					$scope._dirty = false;
 					$scope._valid = false;
 					$scope._invalid = false;
+					$scope._message = "";
 					
 					$scope.isDirty = function(){
 						return $scope._dirty;
@@ -38,11 +43,31 @@
 					};
 					
 					$scope.validationMessage = function(){
-						return "[TODO] Invalid.";
+						return $scope._message;
 					};
 				},
 				
 				link: function(scope, element, attrs, ctrl, transclude){
+					
+					var getErrorTypes = function(field){
+						var props = [];
+						ng.forEach(field.$error, function(value, key){
+							if(value === true){
+								props[props.length] = key;
+							}
+						});
+						
+						return props;
+					};
+					
+					var getCamelCasedAttributeNameFromDashed = function(dashedAttributeName){
+						var prop = dashedAttributeName.split('-').map(function(x){
+							return ng.uppercase(x.substring(0,1)) + x.substring(1);
+						}).join('');
+						
+						return "autowrapMsg" + prop;
+					};
+					
 					var config = ng.extend({}, providedConfig, scope.config);
 					var template = autowrapTemplateProvider.get(scope.templateFor || element[0].tagName, scope.theme);
 					var compiledTemplate = ng.element($compile(template)(scope));
@@ -52,7 +77,7 @@
 					inputPlaceHolder.remove();	
 					
 					// set watches
-					var setWatch = function(controller, elementName, propertyToWatch, scopeProperty){
+					var setWatch = function(controller, elementName, propertyToWatch, scopeProperty, additionalCallback, callbackContext){
 						scope[scopeProperty] = controller[elementName][propertyToWatch];
 						scope.$watch(
 							function(){
@@ -60,14 +85,36 @@
 							}, 
 							function(newVal, oldVal){
 								scope[scopeProperty] = newVal;
+								if(typeof additionalCallback === "function"){
+									additionalCallback.apply(callbackContext || null, [newVal, oldVal]);
+								}
 							}
 						);
 					};
 					
 					var elementName = element[0].name;
 					setWatch(ctrl, elementName, "$dirty", "_dirty");
-					setWatch(ctrl, elementName, "$valid", "_valid");
-					setWatch(ctrl, elementName, "$invalid", "_invalid");
+					setWatch(ctrl, elementName, "$valid", "_valid", function(valid){
+						if(valid){
+							scope._message = "";
+						}
+					});
+					setWatch(ctrl, elementName, "$invalid", "_invalid", function(invalid){
+						if(invalid){
+							var errorMessages = filter(
+								getErrorTypes(ctrl[elementName])
+								.map(getCamelCasedAttributeNameFromDashed), 
+								function(attributeName){
+									return ng.isDefined(attrs[attributeName]);
+								}
+							)
+							.map(function(attributeName){
+								return attrs[attributeName];
+							});
+							
+							scope._message = errorMessages.length ? errorMessages[0] : "Invalid.";
+						}
+					});
 					
 					if(config.applyStatesToInput === true){
 						scope.$watch(function(){
