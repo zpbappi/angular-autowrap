@@ -95,6 +95,7 @@
 		function($compile, $filter, autowrapTemplateProvider, providedConfig){
 			
 			var filter = $filter("filter");
+			var customObjectPropertyPrefix = "autowrapCustom";
 			
 			return {
 				restrict: "A",
@@ -113,6 +114,7 @@
 					$scope._valid = false;
 					$scope._invalid = false;
 					$scope._message = "";
+					$scope.custom = {};
 					
 					$scope.isDirty = function(){
 						return $scope._dirty;
@@ -132,7 +134,6 @@
 				},
 				
 				link: function(scope, element, attrs, ctrl, transclude){
-					
 					var getErrorTypes = function(field){
 						var props = [];
 						ng.forEach(field.$error, function(value, key){
@@ -144,13 +145,41 @@
 						return props;
 					};
 					
-					var getCamelCasedAttributeNameFromDashed = function(dashedAttributeName){
+					var getCamelCasedAttributeNameFromDashed = function(dashedAttributeName, prefix){
 						var prop = dashedAttributeName.split('-').map(function(x){
 							return ng.uppercase(x.substring(0,1)) + x.substring(1);
 						}).join('');
-						
-						return "autowrapMsg" + prop;
+						return prefix + prop;
 					};
+					
+					var isUpperCase = function(str){
+						return ng.uppercase(str) === str;
+					};
+					
+					var isACustomObjectProperty = function(attrName){
+						if(!attrName){
+							return false;
+						}
+						
+						return 	attrName.indexOf(customObjectPropertyPrefix) === 0 &&
+								attrName.length > customObjectPropertyPrefix.length &&
+								isUpperCase(attrName.substr(customObjectPropertyPrefix.length, 1)); 
+					};
+					
+					var convertToCustomPropertyName = function(attrName){
+						var prefixLen = customObjectPropertyPrefix.length;
+						return ng.lowercase(attrName[prefixLen]) + attrName.substr(prefixLen+1);
+					};
+					
+					// set custom object properties
+					var injectedCustomProperties = {};
+					ng.forEach(attrs, function(val, key){
+						if(isACustomObjectProperty(key)){
+							injectedCustomProperties[convertToCustomPropertyName(key)] = val;
+						}
+					});
+					ng.extend(scope.custom, injectedCustomProperties);
+					console.log(scope.custom);
 					
 					var config = ng.extend({}, providedConfig, scope.config);
 					var template = autowrapTemplateProvider.get(scope.templateFor || element[0].tagName, scope.theme);
@@ -187,7 +216,7 @@
 						if(invalid){
 							var errorMessages = filter(
 								getErrorTypes(ctrl[elementName])
-								.map(getCamelCasedAttributeNameFromDashed), 
+								.map(function(a){ return getCamelCasedAttributeNameFromDashed(a, "autowrapMsg"); }), 
 								function(attributeName){
 									return ng.isDefined(attrs[attributeName]);
 								}
