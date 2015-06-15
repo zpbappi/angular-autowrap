@@ -10,9 +10,8 @@
 		"autowrapCustomPropertyHelper",
 		"autowrapTemplateProvider",
 		"autowrapUtility",
-		function($compile, providedConfig, linkerHelper, customPropertyHelper, templateProvider, utility){
-			
-			var validationMessagePropertyPrefix = "autowrapMsg";
+		"validationMessagePropertyPrefix",
+		function($compile, providedConfig, linkerHelper, customPropertyHelper, templateProvider, utility, validationMessagePropertyPrefix){
 			
 			return {
 				init: function(scope, element, attrs, ctrl, transclude){

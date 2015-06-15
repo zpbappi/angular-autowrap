@@ -5,9 +5,8 @@
 	.module("angular-autowrap-internal")
 	.factory("autowrapCustomPropertyHelper", [
 		"autowrapUtility",
-		function(utility){
-			
-			var customObjectPropertyPrefix = "autowrapCustom";
+		"customObjectPropertyPrefix",
+		function(utility, customObjectPropertyPrefix){
 			
 			return {
 				isCustomProperty: function(attrName){
