@@ -77,8 +77,8 @@
 
 (function(ng){
 	"use strict";
-	
-	ng.module("angular-autowrap", []);
+	ng.module("angular-autowrap-internal", []);
+	ng.module("angular-autowrap", ["angular-autowrap-internal"]);
 	
 })(angular);
 
@@ -88,14 +88,9 @@
 	ng
 	.module("angular-autowrap")
 	.directive("autowrap", [
-		"$compile",
-		"$filter",
-		"autowrapTemplateProvider",
-		"autowrapConfig",
-		function($compile, $filter, autowrapTemplateProvider, providedConfig){
-			
-			var filter = $filter("filter");
-			var customObjectPropertyPrefix = "autowrapCustom";
+		"autowrapController",
+		"autowrapLinker",
+		function(autowrapController, autowrapLinker){
 			
 			return {
 				restrict: "A",
@@ -107,6 +102,48 @@
 				},
 				
 				controller: function($scope, $element, $attrs, $transclude){
+					autowrapController.init($scope);
+				},
+				
+				link: function(scope, element, attrs, ctrl, transclude){
+					autowrapLinker.init(scope, element, attrs, ctrl, transclude);
+				}
+			};
+		}
+	]);
+	
+})(angular);
+
+(function(ng){
+	"use strict";
+	
+	ng
+	.module("angular-autowrap")
+	.value('autowrapConfig', {
+		auto: {
+			wrapperClass: "auto-wrapper",
+			messageClass: "auto-wrapper-message",
+			applyStatesToWrapper: true
+		},
+		dirtyStateClass: "dirty",
+		validStateClass: "valid",
+		invalidStateClass: "invalid",
+		applyStatesToInput: false
+	});
+	
+})(angular);
+
+(function(ng){
+	"use strict";
+	
+	ng
+	.module("angular-autowrap-internal")
+	.factory("autowrapController", [
+		"autowrapConfig",
+		function(providedConfig){
+			
+			return {
+				init: function($scope){
 					var config = {};
 					ng.extend(config, providedConfig, $scope.config);
 					
@@ -131,130 +168,6 @@
 					$scope.validationMessage = function(){
 						return $scope._message;
 					};
-				},
-				
-				link: function(scope, element, attrs, ctrl, transclude){
-					var getErrorTypes = function(field){
-						var props = [];
-						ng.forEach(field.$error, function(value, key){
-							if(value === true){
-								props[props.length] = key;
-							}
-						});
-						
-						return props;
-					};
-					
-					var getCamelCasedAttributeNameFromDashed = function(dashedAttributeName, prefix){
-						var prop = dashedAttributeName.split('-').map(function(x){
-							return ng.uppercase(x.substring(0,1)) + x.substring(1);
-						}).join('');
-						return prefix + prop;
-					};
-					
-					var isUpperCase = function(str){
-						return ng.uppercase(str) === str;
-					};
-					
-					var isACustomObjectProperty = function(attrName){
-						if(!attrName){
-							return false;
-						}
-						
-						return 	attrName.indexOf(customObjectPropertyPrefix) === 0 &&
-								attrName.length > customObjectPropertyPrefix.length &&
-								isUpperCase(attrName.substr(customObjectPropertyPrefix.length, 1)); 
-					};
-					
-					var convertToCustomPropertyName = function(attrName){
-						var prefixLen = customObjectPropertyPrefix.length;
-						return ng.lowercase(attrName[prefixLen]) + attrName.substr(prefixLen+1);
-					};
-					
-					// set custom object properties
-					var injectedCustomProperties = {};
-					ng.forEach(attrs, function(val, key){
-						if(isACustomObjectProperty(key)){
-							injectedCustomProperties[convertToCustomPropertyName(key)] = val;
-						}
-					});
-					ng.extend(scope.custom, injectedCustomProperties);
-					console.log(scope.custom);
-					
-					var config = ng.extend({}, providedConfig, scope.config);
-					var template = autowrapTemplateProvider.get(scope.templateFor || element[0].tagName, scope.theme);
-					var compiledTemplate = ng.element($compile(template)(scope));
-					element.after(compiledTemplate);
-					var inputPlaceHolder = compiledTemplate.find("placeholder"); 
-					inputPlaceHolder.after(element);
-					inputPlaceHolder.remove();	
-					
-					// set watches
-					var setWatch = function(controller, elementName, propertyToWatch, scopeProperty, additionalCallback, callbackContext){
-						scope[scopeProperty] = controller[elementName][propertyToWatch];
-						scope.$watch(
-							function(){
-								return controller[elementName][propertyToWatch];
-							}, 
-							function(newVal, oldVal){
-								scope[scopeProperty] = newVal;
-								if(typeof additionalCallback === "function"){
-									additionalCallback.apply(callbackContext || null, [newVal, oldVal]);
-								}
-							}
-						);
-					};
-					
-					var elementName = element[0].name;
-					setWatch(ctrl, elementName, "$dirty", "_dirty");
-					setWatch(ctrl, elementName, "$valid", "_valid", function(valid){
-						if(valid){
-							scope._message = "";
-						}
-					});
-					setWatch(ctrl, elementName, "$invalid", "_invalid", function(invalid){
-						if(invalid){
-							var errorMessages = filter(
-								getErrorTypes(ctrl[elementName])
-								.map(function(a){ return getCamelCasedAttributeNameFromDashed(a, "autowrapMsg"); }), 
-								function(attributeName){
-									return ng.isDefined(attrs[attributeName]);
-								}
-							)
-							.map(function(attributeName){
-								return attrs[attributeName];
-							});
-							
-							scope._message = errorMessages.length ? errorMessages[0] : "Invalid.";
-						}
-					});
-					
-					if(config.applyStatesToInput === true){
-						scope.$watch(function(){
-							if(scope.isDirty()){
-								element.addClass(config.dirtyStateClass);
-							}
-							else{
-								element.removeClass(config.dirtyStateClass);
-							}
-							
-							if(scope.isValid()){
-								element.addClass(config.validStateClass);
-							}
-							else{
-								element.removeClass(config.validStateClass);
-							}
-							
-							if(scope.isInvalid()){
-								element.addClass(config.invalidStateClass);
-							}
-							else{
-								element.removeClass(config.invalidStateClass);
-							}
-							
-							return true;
-						});
-					}
 				}
 			};
 		}
@@ -266,18 +179,176 @@
 	"use strict";
 	
 	ng
-	.module("angular-autowrap")
-	.value('autowrapConfig', {
-		auto: {
-			wrapperClass: "auto-wrapper",
-			messageClass: "auto-wrapper-message",
-			applyStatesToWrapper: true
-		},
-		dirtyStateClass: "dirty",
-		validStateClass: "valid",
-		invalidStateClass: "invalid",
-		applyStatesToInput: false
-	});
+	.module("angular-autowrap-internal")
+	.factory("autowrapCustomPropertyHelper", [
+		"autowrapUtility",
+		function(utility){
+			
+			var customObjectPropertyPrefix = "autowrapCustom";
+			
+			return {
+				isCustomProperty: function(attrName){
+					if(!attrName){
+						return false;
+					}
+					
+					return 	attrName.indexOf(customObjectPropertyPrefix) === 0 &&
+							attrName.length > customObjectPropertyPrefix.length &&
+							utility.isUpperCase(attrName.substr(customObjectPropertyPrefix.length, 1)); 
+				},
+				
+				getCustomPropertyName: function(attributeName){
+					var prefixLen = customObjectPropertyPrefix.length;
+					return ng.lowercase(attributeName[prefixLen]) + attributeName.substr(prefixLen+1);
+				},
+			};
+		}
+	]);
+	
+})(angular);
+
+(function(ng){
+	"use strict";
+	
+	ng
+	.module("angular-autowrap-internal")
+	.factory("autowrapLinkerHelper", [
+		"autowrapUtility",
+		function(utility) {
+			
+			return {
+				getErrorTypes: function(field){
+					var props = [];
+					ng.forEach(field.$error, function(value, key){
+						if(value === true){
+							props[props.length] = key;
+						}
+					});
+					
+					return props;
+				},
+				
+				setWatch: function(scope, controller, elementName, propertyToWatch, scopeProperty, additionalCallback, callbackContext){
+					scope[scopeProperty] = controller[elementName][propertyToWatch];
+					scope.$watch(
+						function(){
+							return controller[elementName][propertyToWatch];
+						}, 
+						function(newVal, oldVal){
+							scope[scopeProperty] = newVal;
+							if(typeof additionalCallback === "function"){
+								additionalCallback.apply(callbackContext || null, [newVal, oldVal]);
+							}
+						}
+					);
+				},
+				
+				enableAddingStateClassesToInputElement: function(scope, element, config){
+					scope.$watch(function(){
+						if(scope.isDirty()){
+							element.addClass(config.dirtyStateClass);
+						}
+						else{
+							element.removeClass(config.dirtyStateClass);
+						}
+						
+						if(scope.isValid()){
+							element.addClass(config.validStateClass);
+						}
+						else{
+							element.removeClass(config.validStateClass);
+						}
+						
+						if(scope.isInvalid()){
+							element.addClass(config.invalidStateClass);
+						}
+						else{
+							element.removeClass(config.invalidStateClass);
+						}
+						
+						return true;
+					});
+				}
+			};
+		}
+	]);
+	
+})(angular);
+
+(function(ng){
+	"use strict";
+	
+	ng
+	.module("angular-autowrap-internal")
+	.factory("autowrapLinker", [
+		"$compile",
+		"autowrapConfig",
+		"autowrapLinkerHelper",
+		"autowrapCustomPropertyHelper",
+		"autowrapTemplateProvider",
+		"autowrapUtility",
+		function($compile, providedConfig, linkerHelper, customPropertyHelper, templateProvider, utility){
+			
+			var validationMessagePropertyPrefix = "autowrapMsg";
+			
+			return {
+				init: function(scope, element, attrs, ctrl, transclude){
+					// set custom object properties
+					var injectedCustomProperties = {};
+					ng.forEach(attrs, function(val, key){
+						if(customPropertyHelper.isCustomProperty(key)){
+							injectedCustomProperties[customPropertyHelper.getCustomPropertyName(key)] = val;
+						}
+					});
+					ng.extend(scope.custom, injectedCustomProperties);
+
+					// transcluding(!)...
+					var config = ng.extend({}, providedConfig, scope.config);
+					var template = templateProvider.get(scope.templateFor || element[0].tagName, scope.theme);
+					var compiledTemplate = ng.element($compile(template)(scope));
+					element.after(compiledTemplate);
+					var inputPlaceHolder = compiledTemplate.find("placeholder"); 
+					inputPlaceHolder.after(element);
+					inputPlaceHolder.remove();	
+					
+					// set watches
+					var elementName = element[0].name;
+					
+					linkerHelper.setWatch(scope, ctrl, elementName, "$dirty", "_dirty");
+					
+					linkerHelper.setWatch(scope, ctrl, elementName, "$valid", "_valid", function(valid){
+						if(valid){
+							scope._message = "";
+						}
+					});
+					
+					linkerHelper.setWatch(scope, ctrl, elementName, "$invalid", "_invalid", function(invalid) {
+						if(invalid) {
+							var errorTypes = 
+								linkerHelper.getErrorTypes(ctrl[elementName])
+								.map(function(a){ 
+									return utility.getCamelCasedAttributeName(a, validationMessagePropertyPrefix); 
+								});
+								
+							var availableErrorMessages = 
+								utility.filter(errorTypes, function(attributeName){
+									return ng.isDefined(attrs[attributeName]);
+								})
+								.map(function(attributeName){
+									return attrs[attributeName];
+								});
+							
+							scope._message = availableErrorMessages.length ? availableErrorMessages[0] : "Invalid.";
+						}
+					});
+					
+					if(config.applyStatesToInput === true){
+						linkerHelper.enableAddingStateClassesToInputElement(scope, element, config);
+					}
+				} 
+			};
+		}
+	]);
 	
 })(angular);
 
@@ -356,6 +427,36 @@
 			}
 		};
 	}]);
+	
+})(angular);
+
+(function(ng){
+	"use strict";
+	
+	ng
+	.module("angular-autowrap-internal")
+	.factory("autowrapUtility", [
+		"$filter",
+		function($filter){
+			return {
+				
+				filter: function(array, expression, comparator){
+					return $filter("filter")(array, expression, comparator);
+				},
+				
+				getCamelCasedAttributeName : function(dashedAttributeName, prefix){
+					var prop = dashedAttributeName.split('-').map(function(x){
+						return ng.uppercase(x.substring(0,1)) + x.substring(1);
+					}).join('');
+					return prefix + prop;
+				},
+				
+				isUpperCase: function(str){
+					return ng.uppercase(str) === str;
+				}
+			};
+		}
+	]);
 	
 })(angular);
 
