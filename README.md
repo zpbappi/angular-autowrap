@@ -1,7 +1,7 @@
 # Angular AutoWrap
 
 ## Why?
-[Here's](http://zpbappi.com/angular-autowrap-validation-and-control-template/) the complete hisroty, if you are interested.
+[Here's](http://zpbappi.com/angular-autowrap-validation-and-control-template/) the complete history, if you are interested.
 
 ## Getting it
 Check the `dist` folder for Angular AutoWrap javacript library for now. 
