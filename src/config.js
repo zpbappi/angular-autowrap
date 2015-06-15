@@ -12,7 +12,8 @@
 		dirtyStateClass: "dirty",
 		validStateClass: "valid",
 		invalidStateClass: "invalid",
-		applyStatesToInput: false
+		applyStatesToInput: false,
+		noTrack: false
 	});
 	
 })(angular);

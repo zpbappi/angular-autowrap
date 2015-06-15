@@ -26,12 +26,19 @@
 
 					// transcluding(!)...
 					var config = ng.extend({}, providedConfig, scope.config);
+					if(ng.isDefined(attrs.autowrapNoTrack)){
+						config.noTrack = true;
+					}
 					var template = templateProvider.get(scope.templateFor || element[0].tagName, scope.theme);
 					var compiledTemplate = ng.element($compile(template)(scope));
 					element.after(compiledTemplate);
 					var inputPlaceHolder = compiledTemplate.find("placeholder"); 
 					inputPlaceHolder.after(element);
 					inputPlaceHolder.remove();	
+					
+					if(config.noTrack === true){
+						return;
+					}
 					
 					// set watches
 					var elementName = element[0].name;
