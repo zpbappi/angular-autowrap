@@ -1,6 +1,8 @@
 language: node_js
 install:
 - npm install -g gulp
+- npm install
+
 script:
 - gulp
 - git remote set-url --push origin $GH_REPO
