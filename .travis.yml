@@ -1,0 +1,21 @@
+language: node_js
+install:
+- npm install -g gulp
+script:
+- gulp
+- git remote set-url --push origin $GH_REPO
+- git config user.name $GIT_NAME
+- git config user.email $GIT_EMAIL
+- git config credential.helper "store --file=.git/credentials"
+- echo "https://${GH_TOKEN}:@github.com" > .git/credentials
+- git add dist/*
+- git commit -m "[ci skip] travis-ci build # ${TRAVIS_BUILD_NUMBER}"
+- git push origin HEAD:master
+- rm -r .git/credentials
+
+branches:
+  only:
+    - master
+env:
+  global:
+    - GH_REPO: https://github.com/zpbappi/angular-autowrap.git
