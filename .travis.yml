@@ -11,7 +11,7 @@ script:
 - git config credential.helper "store --file=.git/credentials"
 - echo "https://${GH_TOKEN}:@github.com" > .git/credentials
 - git add --all dist/*
-- git commit -m "[ci skip] travis-ci build number: ${TRAVIS_BUILD_NUMBER}"
+- git commit -m "[ci skip] travis-ci build number ${TRAVIS_BUILD_NUMBER}"
 - git push origin HEAD:master
 - rm -r .git/credentials
 
