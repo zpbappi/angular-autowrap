@@ -2,7 +2,8 @@ var gulp = require("gulp"),
     del = require("del"),
     concat = require("gulp-concat"),
     sourcemaps = require("gulp-sourcemaps"),
-    uglify = require("gulp-uglify");
+    uglify = require("gulp-uglify"),
+    babel = require("gulp-babel");
 
 var fileName = "angular-autowrap.js",
     minFileName = "angular-autowrap.min.js";
@@ -25,6 +26,7 @@ gulp.task("build", ["clean-build"], function(){
     return getSourceFiles()
     .pipe(sourcemaps.init())
     .pipe(concat(fileName))
+    .pipe(babel())
     .pipe(sourcemaps.write("./", {includeContent: false, sourceRoot: "../src/"}))
     .pipe(gulp.dest("./build/"));  
 });
@@ -32,6 +34,7 @@ gulp.task("build", ["clean-build"], function(){
 gulp.task("minify", ["clean-minify"], function(){
     return getSourceFiles()
     .pipe(concat(minFileName))
+    .pipe(babel())
     .pipe(uglify())
     .pipe(gulp.dest("./build/"));
 });
