@@ -1,6 +1,6 @@
 (function(ng){
 	"use strict";
-	
+
 	ng
 	.module("angular-autowrap-internal")
 	.constant("customObjectPropertyPrefix", "autowrapCustom")
@@ -8,5 +8,5 @@
 	.constant("templatePathBase", "autowrap-templates/")
 	.constant("defaultTemplateName", "default")
 	;
-	
+
 })(angular);

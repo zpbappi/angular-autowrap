@@ -1,9 +1,9 @@
 (function(ng){
 	"use strict";
-	
+
 	ng
 	.module("angular-autowrap")
-	.value('autowrapConfig', {
+	.value("autowrapConfig", {
 		auto: {
 			wrapperClass: "auto-wrapper",
 			messageClass: "auto-wrapper-message",
@@ -15,5 +15,5 @@
 		applyStatesToInput: false,
 		noTrack: false
 	});
-	
+
 })(angular);

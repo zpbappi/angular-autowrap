@@ -3,13 +3,23 @@ var gulp = require("gulp"),
     concat = require("gulp-concat"),
     sourcemaps = require("gulp-sourcemaps"),
     uglify = require("gulp-uglify"),
-    babel = require("gulp-babel");
+    babel = require("gulp-babel"),
+    eslint = require("gulp-eslint");
 
 var fileName = "angular-autowrap.js",
     minFileName = "angular-autowrap.min.js";
     
-var getSourceFiles = function(){
-    return gulp.src(["./src/app.js", "./src/**/*.js"]);
+var getSourceFiles = function(lint){
+    var stream = gulp.src(["./src/app.js", "./src/**/*.js"]);
+    if(!lint){
+        return stream;
+    }
+    
+    return stream
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failOnError())
+    .pipe(eslint.formatEach('compact', process.stderr));
 };
 
 gulp.task("clean-build", function(cb){
@@ -23,7 +33,7 @@ gulp.task("clean-minify", function(cb){
 gulp.task("clean", ["clean-build", "clean-minify"]);
 
 gulp.task("build", ["clean-build"], function(){
-    return getSourceFiles()
+    return getSourceFiles(true)
     .pipe(sourcemaps.init())
     .pipe(concat(fileName))
     .pipe(babel())
