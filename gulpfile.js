@@ -8,7 +8,7 @@ var fileName = "angular-autowrap.js",
     minFileName = "angular-autowrap.min.js";
     
 var getSourceFiles = function(){
-    return gulp.src(["./src/lib/**/*.js", "./src/app.js", "./src/**/*.js"]);
+    return gulp.src(["./src/app.js", "./src/**/*.js"]);
 };
 
 gulp.task("clean-build", function(cb){
