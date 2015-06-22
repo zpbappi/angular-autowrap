@@ -11,17 +11,17 @@ var getSourceFiles = function(){
     return gulp.src(["./src/lib/**/*.js", "./src/app.js", "./src/**/*.js"]);
 };
 
-gulp.task("clean-debug", function(cb){
+gulp.task("clean-build", function(cb){
    return del(["./build/" + fileName, "./build/" + fileName + ".map"], cb); 
 });
 
-gulp.task("clean-release", function(cb){
+gulp.task("clean-minify", function(cb){
    return del("./build/" + minFileName, cb);
 });
 
-gulp.task("clean", ["clean-debug", "clean-release"]);
+gulp.task("clean", ["clean-build", "clean-minify"]);
 
-gulp.task("debug", ["clean-debug"], function(){
+gulp.task("build", ["clean-build"], function(){
     return getSourceFiles()
     .pipe(sourcemaps.init())
     .pipe(concat(fileName))
@@ -29,13 +29,11 @@ gulp.task("debug", ["clean-debug"], function(){
     .pipe(gulp.dest("./build/"));  
 });
 
-gulp.task("release", ["clean-release"], function(){
+gulp.task("minify", ["clean-minify"], function(){
     return getSourceFiles()
     .pipe(concat(minFileName))
     .pipe(uglify())
     .pipe(gulp.dest("./build/"));
 });
 
-gulp.task("all", ["debug", "release"]);
-
-gulp.task('default', ["all"]);
+gulp.task('default', ["build", "minify"]);
