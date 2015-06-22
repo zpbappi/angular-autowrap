@@ -12,11 +12,11 @@ var getSourceFiles = function(){
 };
 
 gulp.task("clean-debug", function(cb){
-   return del(["./dist/" + fileName, "./dist/" + fileName + ".map"], cb); 
+   return del(["./build/" + fileName, "./build/" + fileName + ".map"], cb); 
 });
 
 gulp.task("clean-release", function(cb){
-   return del("./dist/" + minFileName, cb);
+   return del("./build/" + minFileName, cb);
 });
 
 gulp.task("clean", ["clean-debug", "clean-release"]);
@@ -26,14 +26,14 @@ gulp.task("debug", ["clean-debug"], function(){
     .pipe(sourcemaps.init())
     .pipe(concat(fileName))
     .pipe(sourcemaps.write("./", {includeContent: false, sourceRoot: "../src/"}))
-    .pipe(gulp.dest("./dist/"));  
+    .pipe(gulp.dest("./build/"));  
 });
 
 gulp.task("release", ["clean-release"], function(){
     return getSourceFiles()
     .pipe(concat(minFileName))
     .pipe(uglify())
-    .pipe(gulp.dest("./dist/"));
+    .pipe(gulp.dest("./build/"));
 });
 
 gulp.task("all", ["debug", "release"]);
