@@ -11,7 +11,7 @@
 				getErrorTypes: function(field){
 					var props = [];
 					ng.forEach(field.$error, function(value, key){
-						if(value === true){
+						if(value){
 							props[props.length] = key;
 						}
 					});
