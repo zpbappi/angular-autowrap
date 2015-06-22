@@ -17,9 +17,12 @@
 					templateFor: "@autowrapTemplateFor"
 				},
 				
-				controller: function($scope, $element, $attrs, $transclude){
-					autowrapController.init($scope);
-				},
+				controller: [
+					"$scope",
+					function($scope){
+						autowrapController.init($scope);
+					}
+				],
 				
 				link: function(scope, element, attrs, ctrl, transclude){
 					autowrapLinker.init(scope, element, attrs, ctrl, transclude);
