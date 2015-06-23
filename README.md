@@ -1,5 +1,7 @@
 # Angular AutoWrap
 
+[![Code Climate](https://codeclimate.com/github/zpbappi/angular-autowrap/badges/gpa.svg)](https://codeclimate.com/github/zpbappi/angular-autowrap)
+
 ## Why?
 [Here's](http://zpbappi.com/angular-autowrap-validation-and-control-template/) the complete history, if you are interested.
 
