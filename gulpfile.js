@@ -22,6 +22,10 @@ var getSourceFiles = function(lint){
     .pipe(eslint.formatEach('compact', process.stderr));
 };
 
+gulp.task('lint', function(){
+   return getSourceFiles(true); 
+});
+
 gulp.task("clean-build", function(cb){
    return del(["./build/" + fileName, "./build/" + fileName + ".map"], cb); 
 });
