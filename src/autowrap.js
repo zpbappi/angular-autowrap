@@ -10,11 +10,12 @@
 
 			return {
 				restrict: "A",
-				require: "^form",
+				require: ["?^form", "?ngModel"],
 				scope: {
 					config: "=autowrapConfig",
 					theme: "@autowrapTheme",
-					templateFor: "@autowrapTemplateFor"
+					templateFor: "@autowrapTemplateFor",
+					validators: "=autowrapValidators"
 				},
 
 				controller: [
@@ -24,8 +25,8 @@
 					}
 				],
 
-				link: function(scope, element, attrs, ctrl){
-					autowrapLinker.init(scope, element, attrs, ctrl);
+				link: function(scope, element, attrs, ctrls){
+					autowrapLinker.init(scope, element, attrs, ctrls[0], ctrls[1]);
 				}
 			};
 		}

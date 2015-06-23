@@ -21,6 +21,20 @@
 
 				isUpperCase: function(str){
 					return ng.uppercase(str) === str;
+				},
+
+				hasAnyProperty: function(obj){
+					if(!obj){
+						return false;
+					}
+
+					for(var prop in obj){
+						if(obj.hasOwnProperty(prop)){
+							return true;
+						}
+					}
+
+					return false;
 				}
 			};
 		}

@@ -14,7 +14,7 @@
 		function($compile, providedConfig, linkerHelper, customPropertyHelper, templateProvider, utility, validationMessagePropertyPrefix){
 
 			return {
-				init: function(scope, element, attrs, ctrl){
+				init: function(scope, element, attrs, formCtrl, modelCtrl){
 					// set custom object properties
 					var injectedCustomProperties = {};
 					ng.forEach(attrs, function(val, key){
@@ -40,21 +40,38 @@
 						return;
 					}
 
+					// defense
+					if(formCtrl == null){
+						throw "The element, applied 'autowrap' directive, must be placed inside form (or, ngForm) to work for validation messages." +
+                              "\nIf this is not a form element that needs tracking of validation status, just add 'autowrap-no-track' property to the element.";
+					}
+
+					if(typeof scope.validators === "object" && utility.hasAnyProperty(scope.validators)){
+						if(modelCtrl == null){
+							throw "To use custom validators with 'autowrap', the element must have ngModel directive applied to it.";
+						}
+						else{
+							ng.forEach(scope.validators, function(validationFunction, validationName){
+								modelCtrl.$validators[validationName] = validationFunction;
+							});
+						}
+					}
+
 					// set watches
 					var elementName = element[0].name;
 
-					linkerHelper.setWatch(scope, ctrl, elementName, "$dirty", "_dirty");
+					linkerHelper.setWatch(scope, formCtrl, elementName, "$dirty", "_dirty");
 
-					linkerHelper.setWatch(scope, ctrl, elementName, "$valid", "_valid", function(valid){
+					linkerHelper.setWatch(scope, formCtrl, elementName, "$valid", "_valid", function(valid){
 						if(valid){
 							scope._message = "";
 						}
 					});
 
-					linkerHelper.setWatch(scope, ctrl, elementName, "$invalid", "_invalid", function(invalid) {
+					linkerHelper.setWatch(scope, formCtrl, elementName, "$invalid", "_invalid", function(invalid) {
 						if(invalid) {
 							var errorTypes =
-								linkerHelper.getErrorTypes(ctrl[elementName])
+								linkerHelper.getErrorTypes(formCtrl[elementName])
 								.map(function(a){
 									return utility.getCamelCasedAttributeName(a, validationMessagePropertyPrefix);
 								});
