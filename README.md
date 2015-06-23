@@ -4,8 +4,9 @@
 [Here's](http://zpbappi.com/angular-autowrap-validation-and-control-template/) the complete history, if you are interested.
 
 ## Getting it
-Sorry for the bad news, you will have to build it from the source. I am currently working on a automated build process. 
-Once that is done, life will be much easier.
+Check the [latest release](https://github.com/zpbappi/angular-autowrap/releases/latest) and download your favorite flavor of the library.
+
+I am working on a automated build process to make it even easier to get.
 
 ## Building from source
 Make sure that you have [gulp](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md) installed globally. 
