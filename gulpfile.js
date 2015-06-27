@@ -4,7 +4,8 @@ var gulp = require("gulp"),
     sourcemaps = require("gulp-sourcemaps"),
     uglify = require("gulp-uglify"),
     babel = require("gulp-babel"),
-    eslint = require("gulp-eslint");
+    eslint = require("gulp-eslint"),
+    rename = require("gulp-rename");
 
 var fileName = "angular-autowrap.js",
     minFileName = "angular-autowrap.min.js";
@@ -26,17 +27,11 @@ gulp.task('lint', function(){
    return getSourceFiles(true); 
 });
 
-gulp.task("clean-build", function(cb){
-   return del(["./build/" + fileName, "./build/" + fileName + ".map"], cb); 
+gulp.task("clean", function(cb){
+    return del("./build/*", cb);
 });
 
-gulp.task("clean-minify", function(cb){
-   return del("./build/" + minFileName, cb);
-});
-
-gulp.task("clean", ["clean-build", "clean-minify"]);
-
-gulp.task("build", ["clean-build"], function(){
+gulp.task("build", ["clean"], function(){
     return getSourceFiles(true)
     .pipe(sourcemaps.init())
     .pipe(concat(fileName))
@@ -45,12 +40,16 @@ gulp.task("build", ["clean-build"], function(){
     .pipe(gulp.dest("./build/"));  
 });
 
-gulp.task("minify", ["clean-minify"], function(){
+gulp.task("release", ["clean"], function(){
     return getSourceFiles()
-    .pipe(concat(minFileName))
+    .pipe(concat(fileName))
     .pipe(babel())
+    .pipe(gulp.dest("./build/"))
+    .pipe(rename(minFileName))
+    .pipe(sourcemaps.init())
     .pipe(uglify())
+    .pipe(sourcemaps.write("./", {includeContent: false, sourceRoot: "./"}))
     .pipe(gulp.dest("./build/"));
 });
 
-gulp.task('default', ["build", "minify"]);
+gulp.task('default', ["build"]);
