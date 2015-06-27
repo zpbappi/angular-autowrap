@@ -9,14 +9,14 @@
     "template"
   ],
   "description": "An easier and less noisy way of doing validation and designing control template in angularjs",
-  "version": "1.0.0",
+  "version": "0.3.0",
   "homepage": "https://github.com/zpbappi/angular-autowrap",
   "repository": {
     "type": "git",
     "url": "https://github.com/zpbappi/angular-autowrap.git"
   },
   "dependencies": {
-    "angular": "1.3.x"
+    "angular": "^1.4.1"
   },
   "devDependencies": {
     "del": "^1.2.0",
