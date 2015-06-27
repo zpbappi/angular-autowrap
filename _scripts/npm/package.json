@@ -1,0 +1,23 @@
+{
+  "author": "Zp Bappi <zpbappi@gmail.com> (http://zpbappi.com)",
+  "name": "angular-autowrap",
+  "keywords": [
+    "angular",
+    "wrap",
+    "autowrap",
+    "validation",
+    "template"
+  ],
+  "description": "An easier and less noisy way of doing validation and designing control template in angularjs",
+  "version": "x.x.x",
+  "homepage": "https://github.com/zpbappi/angular-autowrap",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zpbappi/angular-autowrap.git"
+  },
+  "dependencies": {
+    "angular": "^1.4.1"
+  },
+  "license": "MIT",
+  "main": "angular-autowrap.js"
+}
