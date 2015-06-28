@@ -4,7 +4,7 @@
 is_proper_version(){
   version="$1"
 
-  if [[ "$version" =~ ^[1-9][0-9]*\.[0-9]+\.[0-9]+(\-(alpha|beta|rc)(\.[1-9][0-9]*)?)?$ ]]
+  if [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(\-(alpha|beta|rc)(\.[1-9][0-9]*)?)?$ ]]
   then
     echo 0
     return 0
@@ -30,7 +30,7 @@ is_major_version(){
 is_prerelease_version(){
   version="$1"
 
-  if [[ "$version" =~ ^[1-9][0-9]*\.[0-9]+\.[0-9]+\-(alpha|beta|rc)(\.[1-9][0-9]*)?$ ]]
+  if [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+\-(alpha|beta|rc)(\.[1-9][0-9]*)?$ ]]
   then
     echo 0
     return 0
