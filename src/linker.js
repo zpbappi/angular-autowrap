@@ -41,13 +41,13 @@
 					}
 
 					// defense
-					if(formCtrl == null){
+					if(formCtrl === null){
 						throw "The element, applied 'autowrap' directive, must be placed inside form (or, ngForm) to work for validation messages." +
                               "\nIf this is not a form element that needs tracking of validation status, just add 'autowrap-no-track' property to the element.";
 					}
 
 					if(typeof scope.validators === "object" && utility.hasAnyProperty(scope.validators)){
-						if(modelCtrl == null){
+						if(modelCtrl === null){
 							throw "To use custom validators with 'autowrap', the element must have ngModel directive applied to it.";
 						}
 						else{

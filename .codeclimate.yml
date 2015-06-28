@@ -5,3 +5,4 @@ languages:
    PHP: false
 exclude_paths:
 - "example/*"
+- "_scripts/*"
