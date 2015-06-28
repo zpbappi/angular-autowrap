@@ -1,0 +1,25 @@
+language: node_js
+branches:
+  except:
+    - /^[Rr]elease\-[1-9][0-9]*\.[0-9]+\.[0-9]+(\-(alpha|beta|rc)(\.[1-9][0-9]*)?)?$/
+install:
+- npm install -g gulp
+- npm install
+
+script:
+- gulp lint
+
+env:
+  global:
+  - GH_REPO: https://github.com/zpbappi/travis-ci-exp.git
+
+after_success:
+- chmod ugo+x _scripts/*.sh
+- chmod ugo+x _scripts/*/*.sh
+- _scripts/publishing-prerequisite.sh
+- _scripts/publish.sh
+
+notifications:
+  email:
+    on_success: never
+    on_failure: always
