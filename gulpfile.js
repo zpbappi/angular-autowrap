@@ -4,8 +4,7 @@ var gulp = require("gulp"),
     sourcemaps = require("gulp-sourcemaps"),
     uglify = require("gulp-uglify"),
     babel = require("gulp-babel"),
-    eslint = require("gulp-eslint"),
-    rename = require("gulp-rename");
+    eslint = require("gulp-eslint");
 
 var fileName = "angular-autowrap.js",
     minFileName = "angular-autowrap.min.js";
@@ -45,8 +44,8 @@ gulp.task("release", ["clean"], function(){
     .pipe(concat(fileName))
     .pipe(babel())
     .pipe(gulp.dest("./build/"))
-    .pipe(rename(minFileName))
     .pipe(sourcemaps.init())
+    .pipe(concat(minFileName))
     .pipe(uglify())
     .pipe(sourcemaps.write("./", {includeContent: false, sourceRoot: "./"}))
     .pipe(gulp.dest("./build/"));
