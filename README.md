@@ -1,5 +1,7 @@
 # Angular AutoWrap
 
+[![Build Status](https://travis-ci.org/zpbappi/angular-autowrap.svg?branch=dev)](https://travis-ci.org/zpbappi/angular-autowrap)
+[![Coverage Status](https://coveralls.io/repos/zpbappi/angular-autowrap/badge.svg?branch=dev)](https://coveralls.io/r/zpbappi/angular-autowrap?branch=dev)
 [![Code Climate](https://codeclimate.com/github/zpbappi/angular-autowrap/badges/gpa.svg)](https://codeclimate.com/github/zpbappi/angular-autowrap)
 
 ## Why?
