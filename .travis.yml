@@ -8,6 +8,7 @@ install:
 
 script:
 - gulp lint
+- ./node_modules/.bin/karma start karma.conf.js --single-run --browsers PhantomJS
 
 env:
   global:
