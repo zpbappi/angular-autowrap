@@ -8,10 +8,11 @@ install:
 
 before_script:
 - npm install karma-phantomjs-launcher
+- npm install coveralls
 
 script:
 - gulp lint
-- ./node_modules/.bin/karma start karma.conf.js --single-run --browsers PhantomJS
+- ./node_modules/.bin/karma start karma.conf.js --single-run --browsers PhantomJS | ./node_modules/.bin/coveralls
 
 env:
   global:
