@@ -21,6 +21,7 @@ publish_npm(){
   
   mkdir $tmp_dir
   cp build/* $tmp_dir/
+  cp README.md $tmp_dir/
   cp _scripts/npm/package.json $tmp_dir/
   replaceJsonProp "$tmp_dir/package.json" "version" ".*" "$version"
   cd $tmp_dir
