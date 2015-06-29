@@ -12,7 +12,8 @@ before_script:
 
 script:
 - gulp lint
-- ./node_modules/.bin/karma start karma.conf.js --single-run --browsers PhantomJS | ./node_modules/.bin/coveralls
+- ./node_modules/.bin/karma start karma.conf.js --single-run --browsers PhantomJS 
+- cat coverage/*/lcov.info | ./node_modules/coveralls/bin/coveralls.js
 
 env:
   global:
