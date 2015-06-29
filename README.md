@@ -46,7 +46,7 @@ For now, check the `example` folder.
 **1.** How come you deploy customized packages in npm, bower and GitHub from travis?
 <br>
 **Ans:** Isn't that cool? I know! Anyway, please check the `_scripts` folder.
-`publish.sh` is the mainentry point as defined in `.travis.yml`.
+`publish.sh` is the main entry point as defined in `.travis.yml`.
 Feel free to use it if you want.
 
 **2.** Why don't you write any documentation and usage example demonstrating the features?
