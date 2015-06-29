@@ -6,17 +6,36 @@
 [Here's](http://zpbappi.com/angular-autowrap-validation-and-control-template/) the complete history, if you are interested.
 
 ## Getting it
-Check the [latest release](https://github.com/zpbappi/angular-autowrap/releases/latest) and download your favorite flavor of the library.
+I use git tags to build a version automatically inside travis. Each tag is released in *npm*, *bower* and *GitHub Releases* simultaneously.
+Here's how you get it:
+ 
+### npm
+```sh
+npm install angular-autowrap
+```
 
-I am working on a automated build process to make it even easier to get.
+### bower
+```sh
+bower install angular-autowrap
+```
+
+### GitHub Releases
+You will find all the releases [here](https://github.com/zpbappi/angular-autowrap/releases).
 
 ## Building from source
 Make sure that you have [gulp](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md) installed globally. 
 Then, on the project root folder, run the following commands in sequence:
 ```sh
 npm install
-gulp
+gulp build
 ```
+Output of the is ideal for development, as it is sourcemapped with individual components.
+For production use, I would recommend using the version found in *npm*, *bower* or *GitHub Releases*.
+However, if you want to use the the build from latest code base, run
+```sh
+gulp release
+```
+and then use the build in your project.
 
 ## Using it
 Yet TODO...
