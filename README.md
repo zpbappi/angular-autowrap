@@ -40,4 +40,22 @@ and use the build in your project.
 ## Using it
 Yet TODO...
 
-For now, check the `example` folder. Make sure you build the source library first.
+For now, check the `example` folder.
+
+## FAQ
+**1.** How come you deploy customized packages in npm, bower and GitHub from travis?
+<br>
+**Ans:** Isn't that cool? I know! Anyway, please check the `_scripts` folder.
+`publish.sh` is the mainentry point as defined in `.travis.yml`.
+Feel free to use it if you want.
+
+**2.** Why don't you write any documentation and usage example demonstrating the features?
+<br>
+**Ans:** The reason is quite simple. I don't like to write documentation nearly as much as I like to code.
+But, trying to develop the habit now. You will see some progress soon.
+
+**3.** Then why don't you have any tests?
+<br>
+**Ans:** That is a sin. I am working on that right now.
+There will be no additional feature development before I have it under test coverage.
+FYI, "not having test" is the main reason behind the version being `0.x.x` yet.
