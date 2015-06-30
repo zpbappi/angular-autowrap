@@ -5,8 +5,7 @@ var gulp = require("gulp"),
     uglify = require("gulp-uglify"),
     babel = require("gulp-babel"),
     eslint = require("gulp-eslint"),
-    karma = require("gulp-karma"),
-    addsrc = require("gulp-add-src");
+    karma = require("gulp-karma");
 
 var fileName = "angular-autowrap.js",
     minFileName = "angular-autowrap.min.js";
