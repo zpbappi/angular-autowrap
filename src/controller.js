@@ -4,13 +4,10 @@
 	ng
 	.module("angular-autowrap-internal")
 	.factory("autowrapController", [
-		"autowrapConfig",
-		function(providedConfig){
+		function(){
 
 			return {
 				init: function($scope){
-					var config = {};
-					ng.extend(config, providedConfig, $scope.config);
 
 					$scope._dirty = false;
 					$scope._valid = false;
