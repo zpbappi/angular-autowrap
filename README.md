@@ -24,6 +24,13 @@ bower install angular-autowrap
 ### GitHub Releases
 You will find all the releases [here](https://github.com/zpbappi/angular-autowrap/releases).
 
+## Running the tests
+Quite easy actually. Just run
+```sh
+npm install
+gulp test
+```
+
 ## Building from source
 Make sure that you have [gulp](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md) installed globally. 
 Then, on the project root folder, run the following commands in sequence:
