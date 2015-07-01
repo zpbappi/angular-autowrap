@@ -11,7 +11,7 @@
 					if(!field){
 						return [];
 					}
-					
+
 					var props = [];
 					ng.forEach(field.$error, function(value, key){
 						if(value){
