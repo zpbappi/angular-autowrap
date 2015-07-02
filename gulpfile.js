@@ -57,7 +57,7 @@ gulp.task("release", ["clean"], function(){
     .pipe(gulp.dest("./build/"));
 });
 
-gulp.task("test", function(){
+gulp.task("test", ["lint"], function(){
     var testFiles = [
         "test/**/*.js"
     ];
