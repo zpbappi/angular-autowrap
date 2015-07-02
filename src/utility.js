@@ -23,7 +23,7 @@
 					if(!str){
 						return false;
 					}
-					
+
 					return ng.uppercase(str) === str;
 				},
 
