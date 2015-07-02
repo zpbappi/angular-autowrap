@@ -27,14 +27,17 @@ describe("template provider", function(){
 			expect($templateCache.put).not.toHaveBeenCalled();
 		});
 		
-		it("should always have default template", function(){
+		it("should have default template in template cache", function(){
 			var template = templateProvider.get();
-			expect(template).not.toBeFalsy();
-			expect(typeof template).toBe("string");
-			expect(template.length).toBeGreaterThan(0);
+			expect($templateCache.get(templatePathBase + defaultTemplateName + ".html")).toBe(template);
 		});
 		
-		
+		it("should return default template even if the template is not found in templateCache", function(){
+			var defaultTemplate = $templateCache.get(templatePathBase + defaultTemplateName + ".html");
+			$templateCache.put(templatePathBase + defaultTemplateName + ".html", null);
+			expect($templateCache.get(templatePathBase + defaultTemplateName + ".html")).toBe(null);
+			expect(templateProvider.get()).toBe(defaultTemplate);
+		});
 	});
 	
 	describe("when putting templates", function(){

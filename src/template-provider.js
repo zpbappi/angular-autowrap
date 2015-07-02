@@ -63,7 +63,7 @@
 						}
 					}
 
-					return null;
+					return defaultTemplate;
 				},
 
 				put: function(template, fieldType, theme){
