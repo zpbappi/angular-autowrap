@@ -20,6 +20,10 @@
 				},
 
 				isUpperCase: function(str){
+					if(!str){
+						return false;
+					}
+					
 					return ng.uppercase(str) === str;
 				},
 
