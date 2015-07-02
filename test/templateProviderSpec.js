@@ -15,7 +15,27 @@ describe("template provider", function(){
 		config = autowrapConfig;
 		$templateCache = _$templateCache_;
 		templateProvider = autowrapTemplateProvider;
+		
+		spyOn($templateCache, "put").and.callThrough();
 	}));
+	
+	describe("trivial cases", function(){
+		it("should not be able to put any falsy template", function(){
+			templateProvider.put(null);
+			templateProvider.put(false, "input");
+			templateProvider.put("", "input", "theme");
+			expect($templateCache.put).not.toHaveBeenCalled();
+		});
+		
+		it("should always have default template", function(){
+			var template = templateProvider.get();
+			expect(template).not.toBeFalsy();
+			expect(typeof template).toBe("string");
+			expect(template.length).toBeGreaterThan(0);
+		});
+		
+		
+	});
 	
 	describe("when putting templates", function(){
 		it("should store default template path without any element or theme", function(){
