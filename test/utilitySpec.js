@@ -1,40 +1,42 @@
 "use strict";
 
 describe("utility service", function(){
-	var service,
-		filterFnHolder = {},
-		exp = function(a, b){ return a%2 === 0; };
+	var service;
 	
 	beforeEach(module("angular-autowrap-internal"));
 	
-	beforeEach(function(){
-		filterFnHolder.fn = function(array, expression, comparator){};
-		
-		var filter = function(method){
-			if(method !== "filter"){
-				throw "I wasn't expecting: " + method;
-			}
+	describe("filter method", function(){
+		var mockFilterProvider,
+			mockFilterService,
+			filterExpression;
 			
-			return filterFnHolder.fn;
-		};
+		beforeEach(function(){
+			mockFilterService = jasmine.createSpy("filterService");
+			mockFilterProvider = jasmine.createSpy("filterProvider").and.returnValue(mockFilterService);
+			filterExpression = function(){};
+			
+			module(function($provide){
+				$provide.value("$filter", mockFilterProvider);
+			});
+		});
 		
-		spyOn(filterFnHolder, "fn");
+		beforeEach(inject(function(autowrapUtility){
+			service = autowrapUtility;
+		}));
 		
-		module(function($provide){
-			$provide.value("$filter", filter);
+		it("should use angular 'filter' service from $filter", function(){
+			service.filter([1, 2, 3], filterExpression);
+			expect(mockFilterProvider).toHaveBeenCalledWith("filter");
+			expect(mockFilterService).toHaveBeenCalledWith([1,2,3], filterExpression, void (0));
 		});
 	});
 	
-	beforeEach(inject(function(autowrapUtility){
-		service = autowrapUtility;
-	}));
-	
-	it("should use angular 'filter' service from $filter", function(){
-		service.filter([1, 2, 3], exp);
-		expect(filterFnHolder.fn).toHaveBeenCalledWith([1,2,3], exp, void (0));
-	});
 	
 	describe("isUpperCase method", function(){
+		beforeEach(inject(function(autowrapUtility){
+			service = autowrapUtility;
+		}));
+		
 		it("should return false for falsy values", function(){
 			expect(service.isUpperCase("")).toBe(false);
 			expect(service.isUpperCase(false)).toBe(false);
