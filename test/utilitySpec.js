@@ -90,4 +90,24 @@ describe("utility service", function(){
 		});
 	});
 	
+	describe("hasAnyProperty method", function(){
+		beforeEach(inject(function(autowrapUtility){
+			service = autowrapUtility;
+		}));
+		
+		it("should return false for falsy values", function(){
+			expect(service.hasAnyProperty(false)).toBe(false);
+			expect(service.hasAnyProperty(null)).toBe(false);
+			expect(service.hasAnyProperty(void (0))).toBe(false);
+		});
+		
+		it("should return false for empty objects", function(){
+			expect(service.hasAnyProperty({})).toBe(false);
+		});
+		
+		it("should return true for any object with any property", function(){
+			expect(service.hasAnyProperty({a: true})).toBe(true);
+		});
+	});
+	
 });
