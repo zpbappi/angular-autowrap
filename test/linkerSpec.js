@@ -156,5 +156,85 @@ describe("linker service", function(){
 			expect(linkerHelper.setWatch).toHaveBeenCalledWith(scope, formCtrl, "myName", "$valid", "_valid", jasmine.any(Function));
 			expect(linkerHelper.setWatch).toHaveBeenCalledWith(scope, formCtrl, "myName", "$invalid", "_invalid", jasmine.any(Function));
 		});
+		
+		it("should apply state classes to input if config was on", function(){
+			element = angular.element('<input name="myName" angular-autowrap />');
+			scope.config = {
+				applyStatesToInput: true
+			};
+			spyOn(linkerHelper, "enableAddingStateClassesToInputElement").and.returnValue(void (0));
+			
+			linker.init(scope, element, attrs, {}, null);
+			
+			expect(linkerHelper.enableAddingStateClassesToInputElement).toHaveBeenCalledWith(scope, element, jasmine.objectContaining({applyStatesToInput: true}));
+		});
+		
+		it("should not apply state classes to input if config was off", function(){
+			element = angular.element('<input name="myName" angular-autowrap />');
+			scope.config = {
+				applyStatesToInput: false
+			};
+			spyOn(linkerHelper, "enableAddingStateClassesToInputElement").and.returnValue(void (0));
+
+			linker.init(scope, element, attrs, {}, null);
+
+			expect(linkerHelper.enableAddingStateClassesToInputElement).not.toHaveBeenCalled();
+		});
+	});
+	
+	describe("when input element is being updated", function(){
+		var formCtrl,
+			modelCtrl,
+			linkerHelper;
+			
+		beforeEach(inject(function(autowrapLinkerHelper){
+			linkerHelper = autowrapLinkerHelper;
+		}))
+
+		beforeEach(function(){
+			element = angular.element('<input name="myName" angular-autowrap />');
+			scope.validators = {
+				validation: "consider-me-a-custom-validation-function"
+			};
+			
+			modelCtrl = {
+				$validators: {}
+			};
+			
+			formCtrl = {};
+			formCtrl.myName = {
+				$valid: false,
+				$dirty: false,
+				$invalid: false
+			};
+			
+			attrs[validationMsgPrefix + "Required"] = "Required validation message";
+			
+			linker.init(scope, element, attrs, formCtrl, modelCtrl);
+		});
+		
+		it("should set _message to empty when valid", function(){
+			scope._mesage = "something";
+			formCtrl.myName.$valid = true;
+			scope.$apply();
+			
+			expect(scope._message).toBe("");
+		});
+		
+		it("should set _message from attrs when invalid", function(){
+			spyOn(linkerHelper, "getErrorTypes").and.returnValue(["required"]);
+			formCtrl.myName.$invalid = true;
+			scope.$apply();
+			
+			expect(scope._message).toBe("Required validation message");
+		});
+		
+		it("should set _message to default message when validation message is not available in attrs", function(){
+			spyOn(linkerHelper, "getErrorTypes").and.returnValue(["missing"]);
+			formCtrl.myName.$invalid = true;
+			scope.$apply();
+			
+			expect(scope._message).toBe("Invalid.");
+		});
 	});
 });
