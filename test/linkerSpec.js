@@ -84,6 +84,35 @@ describe("linker service", function(){
 			});
 		});
 		
+		it("may not have name and controllers in noTrack mode", function(){
+			config.noTrack = true;
+			var linkerInit = function(){
+				element = angular.element('<input angular-autowrap />');
+				linker.init(scope, element, attrs, {}, null);
+			};
+			
+			expect(linkerInit).not.toThrow();
+		});
+		
+		it("should be possible to override noTrack config via attrs", function(){
+			config.noTrack = false;
+			var linkerInit = function(){
+				element = angular.element('<input angular-autowrap />');
+				attrs.autowrapNoTrack = true;
+				linker.init(scope, element, attrs, null, null);
+			};
+			
+			expect(linkerInit).not.toThrow();
+			
+			linkerInit = function(){
+				element = angular.element('<input angular-autowrap />');
+				config.noTrack = false;
+				delete attrs.autowrapNoTrack;
+				linker.init(scope, element, attrs, null, null);
+			};
+			expect(linkerInit).toThrow();
+		});
+		
 		it("must have name defined for validation", function(){
 			
 			var linkerInit = function(){
