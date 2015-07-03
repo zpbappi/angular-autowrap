@@ -13,10 +13,19 @@
 				},
 
 				getCamelCasedAttributeName: function(dashedAttributeName, prefix){
+					if(!dashedAttributeName){
+						return dashedAttributeName;
+					}
+
 					var prop = dashedAttributeName.split("-").map(function(x){
 						return ng.uppercase(x.substring(0, 1)) + x.substring(1);
 					}).join("");
-					return prefix + prop;
+
+					if(prefix){
+						return prefix + prop;
+					}
+
+					return ng.lowercase(prop[0]) + prop.substring(1);
 				},
 
 				isUpperCase: function(str){

@@ -66,4 +66,28 @@ describe("utility service", function(){
 		});
 	});
 	
+	describe("getCamelCasedAttributeName method", function(){
+		beforeEach(inject(function(autowrapUtility){
+			service = autowrapUtility;
+		}));
+		
+		it("should return the same input for falsy strings", function(){
+			expect(service.getCamelCasedAttributeName(null)).toBe(null);
+			expect(service.getCamelCasedAttributeName("")).toBe("");
+		});
+		
+		it("should reurn camelCased name from dashed", function(){
+			expect(service.getCamelCasedAttributeName("my-property")).toBe("myProperty");
+		});
+		
+		it("should return the same for a single word", function(){
+			expect(service.getCamelCasedAttributeName("property")).toBe("property");
+		});
+		
+		it("should append the prefix passed to it", function(){
+			expect(service.getCamelCasedAttributeName("property", "my")).toBe("myProperty");
+			expect(service.getCamelCasedAttributeName("my-property", "prefixed")).toBe("prefixedMyProperty");
+		});
+	});
+	
 });
