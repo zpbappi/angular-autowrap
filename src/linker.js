@@ -40,7 +40,13 @@
 						return;
 					}
 
+					var elementName = element[0].name;
+
 					// defense
+					if(!elementName){
+						throw "The element must have a name attribute for the validation to work.";
+					}
+
 					if(formCtrl === null){
 						throw "The element, applied 'autowrap' directive, must be placed inside form (or, ngForm) to work for validation messages." +
                               "\nIf this is not a form element that needs tracking of validation status, just add 'autowrap-no-track' property to the element.";
@@ -58,8 +64,6 @@
 					}
 
 					// set watches
-					var elementName = element[0].name;
-
 					linkerHelper.setWatch(scope, formCtrl, elementName, "$dirty", "_dirty");
 
 					linkerHelper.setWatch(scope, formCtrl, elementName, "$valid", "_valid", function(valid){
