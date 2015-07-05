@@ -64,8 +64,9 @@ Feel free to use it if you want.
 **Ans:** The reason is quite simple. I don't like to write documentation nearly as much as I like to code.
 But, trying to develop the habit now. You will see some progress soon.
 
-**3.** Then why don't you have any tests?
+**3.** Then why don't you have any test?
 <br>
-**Ans:** That is a sin. I am working on that right now.
+**Ans:** ~~That is a sin. I am working on that right now.
 There will be no additional feature development before I have it under test coverage.
-FYI, "not having test" is the main reason behind the version being `0.x.x` yet.
+FYI, "not having test" is the main reason behind the version being `0.x.x` yet.~~
+I do now. And, it feels great to have tests.
