@@ -6,4 +6,4 @@
 version="$1"
 echo "[INFO] Creating GitHub release for version $version"
 
-gh_release "$GH_TOKEN" "$version"
+gh_release "$GH_TOKEN" "$version" "$TRAVIS_REPO_SLUG"

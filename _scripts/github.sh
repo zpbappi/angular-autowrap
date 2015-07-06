@@ -58,20 +58,21 @@ git_commit_n_push(){
   fi
 }
 
-# gh_release $gh_token $tag $description? $is_prerelease?[true|false]
+# gh_release $gh_token $tag $repo_slug $description? $is_prerelease?[true|false]
 gh_release(){
   gh_token="$1"
   tag="$2"
-  description="$3"
+  repo_slug="$3"
+  description="$4"
   is_prerelease="false"
-  gh_release_endpoint=https://api.github.com/repos/zpbappi/travis-ci-exp/releases
+  gh_release_endpoint=https://api.github.com/repos/$repo_slug/releases
   
   if [[ -z "$description" ]]
   then
     description="Automatically released version $tag using API. Details to follow soon."
   fi
   
-  if [[ "$4" == "true" ]]
+  if [[ "$5" == "true" ]]
   then
     is_prerelease="true"
   fi
