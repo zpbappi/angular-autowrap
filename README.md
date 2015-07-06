@@ -55,9 +55,8 @@ For now, check the `example` folder.
 ## FAQ
 **1.** How come you deploy customized packages in npm, bower and GitHub from travis?
 <br>
-**Ans:** Isn't that cool? I know! Anyway, please check the `_scripts` folder.
-`publish.sh` is the main entry point as defined in `.travis.yml`.
-Feel free to use it if you want.
+**Ans:** Isn't that cool? I know! [Here](http://zpbappi.com/publishing-angular-autowrap-to-npm-bower-and-github-releases-from-travis-ci/) 
+is a post describing how I did it.
 
 **2.** Why don't you write any documentation and usage example demonstrating the features?
 <br>
@@ -66,7 +65,7 @@ But, trying to develop the habit now. You will see some progress soon.
 
 **3.** Then why don't you have any test?
 <br>
-**Ans:** ~~That is a sin. I am working on that right now.
+**Ans:** <del>That is a sin. I am working on that right now.
 There will be no additional feature development before I have it under test coverage.
-FYI, "not having test" is the main reason behind the version being `0.x.x` yet.~~
+FYI, "not having test" is the main reason behind the version being `0.x.x` yet.</del>
 I do now. And, it feels great to have tests.
