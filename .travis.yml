@@ -20,6 +20,7 @@ env:
   - GH_REPO: https://github.com/zpbappi/travis-ci-exp.git
 
 after_success:
+- gulp release
 - chmod ugo+x _scripts/*.sh
 - chmod ugo+x _scripts/*/*.sh
 - _scripts/publishing-prerequisite.sh
