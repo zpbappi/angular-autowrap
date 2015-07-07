@@ -81,3 +81,10 @@ gh_release(){
   
   curl -i -H "Authorization: token $gh_token" -d "$data" $gh_release_endpoint > /dev/null 2>&1
 }
+
+# get_assets_url $gh_token $repo_slug $tag
+get_assets_url() {
+  url=`curl --silent -X GET -H "Authorization: token $1" https://api.github.com/repos/$2/releases/tags/$3 | grep -Po '"assets_url"[ ]*:[ ]*"\K([^"]*)(?="[ ]*,)' | cat`
+  echo $url
+  return 0
+}
