@@ -84,7 +84,12 @@ gh_release(){
 
 # get_assets_url $gh_token $repo_slug $tag
 get_assets_url() {
-  url=`curl --silent -X GET -H "Authorization: token $1" https://api.github.com/repos/$2/releases/tags/$3 | grep -Po '"assets_url"[ ]*:[ ]*"\K([^"]*)(?="[ ]*,)' | cat`
+  url=`curl --silent -X GET -H "Authorization: token $1" https://api.github.com/repos/$2/releases/tags/$3 | grep -Po '"upload_url"[ ]*:[ ]*"\K([^"]*)(?="[ ]*,)' | grep -Po '\K([^\{]*)(?=\{.*)' | cat`
   echo $url
   return 0
+}
+
+# add_files_to_release $gh_token $url $file_path $file_name $content_type
+add_files_to_release(){
+  curl --silent -i -X POST -H "Authorization: token $1" -H "Content-Type: $5" --data @"$3" "$2?name=$4" > /dev/null 2>&1
 }
