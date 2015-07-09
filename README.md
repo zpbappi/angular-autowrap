@@ -31,9 +31,9 @@ Then, on the project root folder, run the following commands in sequence:
 npm install
 gulp build
 ```
-Output of the is ideal for development, as it is sourcemapped with individual components.
+Output of the build is ideal for development, as it is sourcemapped with individual components.
 For production use, I would recommend using the version found in *npm*, *bower* or *GitHub Releases*.
-However, if you want to use the latest source code, then run
+However, if you want to use the latest source code (at your own risk) in production, then run
 ```sh
 gulp release
 ```
