@@ -17,7 +17,7 @@ script:
 
 env:
   global:
-  - GH_REPO: https://github.com/zpbappi/travis-ci-exp.git
+  - GH_REPO: https://github.com/zpbappi/angular-autowrap.git
 
 after_success:
 - gulp release
